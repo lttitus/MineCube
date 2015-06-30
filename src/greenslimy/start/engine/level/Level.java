@@ -35,7 +35,6 @@ public class Level {
 		this.tileDepth = tileDepth;
 		this.tileMap = new Tile[tileDepth][tileLength][tileWidth];
 		this.tileMap = createTileMap();
-		this.minimap = new Minimap(this);
 	}
 	
 	public Tile[][][] createTileMap() {
@@ -149,6 +148,10 @@ public class Level {
 	 */
 	public Tile[][][] getTileMap() {
 		return this.tileMap;
+	}
+	
+	public void setMinimap(Minimap map) {
+		this.minimap = map;
 	}
 	
 	public Minimap getMinimap() {
