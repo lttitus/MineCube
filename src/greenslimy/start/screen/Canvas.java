@@ -24,6 +24,7 @@ public class Canvas extends JPanel implements KeyListener {
 	
 	public Canvas() {
 		this.repaint();
+		Engine.l.doTileLogic();
 	}
 	
 	public void paintComponent(Graphics f) {

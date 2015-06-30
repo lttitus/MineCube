@@ -21,7 +21,7 @@ public class Engine extends Thread implements Runnable {
 		l = new Level(9, 9, 9);
 		d = new Display(width, height, gameName);
 		l.setMinimap(new Minimap(l));
-		p = new Player(0, 0, 0);
+		p = new Player(l.getLevelDimens().getX()/2, l.getLevelDimens().getY()/2, 0);
 	}
 	
 	@Override
