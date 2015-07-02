@@ -1,0 +1,9 @@
+*.class
+
+#Ignore binary directory
+bin/
+
+#Eclipse stuff
+.classpath
+.project
+.settings
