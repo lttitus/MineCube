@@ -24,6 +24,11 @@ public class Player {
 		this.viewableDepth = 5;
 	}
 	
+	public Player() {
+		int x=0;
+		int y=0;
+	}
+	
 	public Dimension getPlayerPos() {
 		return new Dimension(this.x, this.y, this.z);
 	}
@@ -67,14 +72,16 @@ public class Player {
 							setPlayerPos(new Dimension(x, y-1, z));
 						}
 					}else{
-						setPlayerPos(new Dimension(x, y-1, z));
+							setPlayerPos(new Dimension(x, y-1, z));
 					}
 				}else{
 					if(z != 0) {
-						if(!(Engine.l.getTileMap()[z-1][y-1][x] instanceof AirTile)) {
-							Engine.l.deleteTile(new Dimension(x, y-1, z-1));
+						if(Engine.l.getTileMap()[z-1][y-1][x].isMinable()) {
+							if(!(Engine.l.getTileMap()[z-1][y-1][x] instanceof AirTile)) {
+								Engine.l.deleteTile(new Dimension(x, y-1, z-1));
+							}
+							setPlayerPos(new Dimension(x, y-1, z));
 						}
-						setPlayerPos(new Dimension(x, y-1, z));
 					}
 				}
 			}
@@ -91,10 +98,12 @@ public class Player {
 					}
 				}else{
 					if(z != 0) {
-						if(!(Engine.l.getTileMap()[z-1][y][x+1] instanceof AirTile)) {
-							Engine.l.deleteTile(new Dimension(x+1, y, z-1));
+						if(Engine.l.getTileMap()[z-1][y][x+1].isMinable()) {
+							if(!(Engine.l.getTileMap()[z-1][y][x+1] instanceof AirTile)) {
+								Engine.l.deleteTile(new Dimension(x+1, y, z-1));
+							}
+							setPlayerPos(new Dimension(x+1, y, z));
 						}
-						setPlayerPos(new Dimension(x+1, y, z));
 					}
 				}
 			}
@@ -111,10 +120,12 @@ public class Player {
 					}
 				}else{
 					if(z != 0) {
-						if(!(Engine.l.getTileMap()[z-1][y+1][x] instanceof AirTile)) {
-							Engine.l.deleteTile(new Dimension(x, y+1, z-1));
+						if(Engine.l.getTileMap()[z-1][y+1][x].isMinable()) {
+							if(!(Engine.l.getTileMap()[z-1][y+1][x] instanceof AirTile)) {
+								Engine.l.deleteTile(new Dimension(x, y+1, z-1));
+							}
+							setPlayerPos(new Dimension(x, y+1, z));
 						}
-						setPlayerPos(new Dimension(x, y+1, z));
 					}
 				}
 			}
@@ -131,24 +142,30 @@ public class Player {
 					}
 				}else{
 					if(z != 0) {
-						if(!(Engine.l.getTileMap()[z-1][y][x-1] instanceof AirTile)) {
-							Engine.l.deleteTile(new Dimension(x-1, y, z-1));
+						if(Engine.l.getTileMap()[z-1][y][x-1].isMinable()) {
+							if(!(Engine.l.getTileMap()[z-1][y][x-1] instanceof AirTile)) {
+								Engine.l.deleteTile(new Dimension(x-1, y, z-1));
+							}
+							Engine.p.setPlayerPos(new Dimension(x-1, y, z));
 						}
-						Engine.p.setPlayerPos(new Dimension(x-1, y, z));
 					}
 				}
 			}
 		}
 		if(dir == 4) {
 			if(z < Engine.l.getLevelDimens().getZ()-1) {
-				Engine.l.deleteTile(getPlayerPos());
-				setPlayerPos(new Dimension(x, y, z+1));
+				if(Engine.l.getTileMap()[z+1][y][x].isMinable()) {
+					Engine.l.deleteTile(getPlayerPos());
+					setPlayerPos(new Dimension(x, y, z+1));
+				}
 			}
 		}
 		if(dir == 5) {
 			if(z!=0) {
-				if(Engine.l.getTileMap()[z-1][y][x] instanceof AirTile) {
-					setPlayerPos(new Dimension(x, y, z-1));
+				if(Engine.l.getTileMap()[z-1][y][x].isMinable()) {	
+					if(Engine.l.getTileMap()[z-1][y][x] instanceof AirTile) {
+						setPlayerPos(new Dimension(x, y, z-1));
+					}
 				}
 			}
 		}

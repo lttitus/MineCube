@@ -23,6 +23,7 @@ public class Tile {
 	private boolean[] renderableFaces = {false, false, false};
 	private int tileId = -1;
 	private int tileType = -1;
+	private boolean canMine = true;
 	
 	/**
 	 * TODO: ADD A BETTER WAY TO IMPLEMENT FACES.
@@ -74,12 +75,31 @@ public class Tile {
 		this.faces = faceTextures;
 	}
 	
+	public Tile(int x, int y, int z, BufferedImage[] faceTextures, int tileId, int tileType, boolean canMine) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.tileId = tileId;
+		this.tileType = tileType;
+		this.faces = faceTextures;
+		this.canMine = canMine;
+	}
+	
 	public Tile(int x, int y, int z, int tileId, int tileType) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.tileId = tileId;
 		this.tileType = tileType;
+	}
+	
+	public Tile(int x, int y, int z, int tileId, int tileType, boolean canMine) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.tileId = tileId;
+		this.tileType = tileType;
+		this.canMine = canMine;
 	}
 	
 	public Tile(int x, int y, int z, boolean hasTallGrass, BufferedImage[] faceTextures, int tileId, int tileType) {
@@ -144,6 +164,10 @@ public class Tile {
 	 */
 	public BufferedImage getFace(int index) {
 		return faces[index];
+	}
+	
+	public boolean isMinable() {
+		return this.canMine;
 	}
 	
 	public static BufferedImage highlight(BufferedImage img) {

@@ -14,7 +14,7 @@ import java.util.Random;
 
 public class Level {
 	
-	public static final Color[] minimapColors = {Color.BLACK, Color.RED, Color.GREEN, Color.GRAY, Color.BLACK};
+	public static final Color[] minimapColors = {Color.BLACK, Color.RED, Color.GREEN, Color.GRAY, Color.DARK_GRAY.darker()};
 	
 	private int tileWidth = 0;	//Level width in tiles - x
 	private int tileLength = 0;	//Level length in tiles - y
@@ -48,15 +48,32 @@ public class Level {
 					if(z != tileDepth-1) {	//Only place bedrock blocks at bottom of the cube
 						if(z == 0) {	//Only place grass blocks at the top of the cube
 							//boolean hasTallGrass = r.nextBoolean();
+							/** TODO: Do the xyz calculations in one place, for readability. */
 							t[z][y][x] = new GrassTile(x*32+(y*32), y*32-(x*16)-(y*16)+(z*32), z, i);
 						}else{
-							if(z>=1&&z<=4) {	//From layer 1 to 4 place dirt tiles
-								t[z][y][x] = new DirtTile(x*32+(y*32), y*32-(x*16)-(y*16)+(z*32), z, i);
-							}else if(z>=5&&z<tileDepth-1){
-								t[z][y][x] = new RockTile(x*32+(y*32), y*32-(x*16)-(y*16)+(z*32), z, i);
+							if(z>=1&&z<=5) {	//From layer 1 to 5 place dirt tiles
+								if(z >= 3) {	//Rough up layers 3-5
+									if(Engine.r.nextInt(2) == 1) {
+										t[z][y][x] = new RockTile(x*32+(y*32), y*32-(x*16)-(y*16)+(z*32), z, i);
+									}else{
+										t[z][y][x] = new DirtTile(x*32+(y*32), y*32-(x*16)-(y*16)+(z*32), z, i);
+									}
+								}else{	//Strictly dirt tiles
+									t[z][y][x] = new DirtTile(x*32+(y*32), y*32-(x*16)-(y*16)+(z*32), z, i);
+								}
+							}else if(z>=6&&z<tileDepth-1){
+								if(z>=tileDepth-3) {	//Rough up bottom layers
+									if(Engine.r.nextInt(2) == 1) {
+										t[z][y][x] = new BedrockTile(x*32+(y*32), y*32-(x*16)-(y*16)+(z*32), z, i);
+									}else{
+										t[z][y][x] = new RockTile(x*32+(y*32), y*32-(x*16)-(y*16)+(z*32), z, i);
+									}
+								}else{	//Strictly rock tiles
+									t[z][y][x] = new RockTile(x*32+(y*32), y*32-(x*16)-(y*16)+(z*32), z, i);
+								}
 							}
 						}
-					}else{
+					}else{	//Strictly bedrock tiles
 						t[z][y][x] = new BedrockTile(x*32+(y*32), y*32-(x*16)-(y*16)+(z*32), z, i);
 					}
 				}
@@ -134,7 +151,7 @@ public class Level {
 	
 	public Dimension getMinimapScale() {
 		if(mapScale == null) {
-			int scale = 4;	//Minimap is 8 times smaller than real map
+			int scale = 4;	//Minimap is 4 times smaller than real map
 			int tilesX = (tileWidth*64)/scale;
 			int tilesY = (tileLength*64)/scale;
 			mapScale = new Dimension(tilesX, tilesY, scale);	//Z is never seen on minimap, so pack the scale
@@ -155,6 +172,7 @@ public class Level {
 	}
 	
 	public Minimap getMinimap() {
+		minimap.positionMap();
 		return this.minimap;
 	}
 

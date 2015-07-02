@@ -18,6 +18,10 @@ public class Minimap {
 		this.mapTileH = Tile.TILE_HEIGHT/scale;
 		this.mapW = l.getMinimapScale().getX()+1;
 		this.mapH = l.getMinimapScale().getY()+1;
+		positionMap();
+	}
+	
+	public void positionMap() {
 		this.mapX = Engine.d.getWidth()-(mapW+18);
 		this.mapY = 0;
 	}

@@ -17,11 +17,15 @@ public class Engine extends Thread implements Runnable {
 	public static Level l = null;
 	public double scale = 0.0;
 	
-	public Engine(int width, int height, String gameName) {
-		l = new Level(9, 9, 9);
+	public Engine(int width, int height, int mapWidth, int mapHeight, int mapDepth, String gameName) {
+		l = new Level(mapDepth, mapHeight, mapWidth);
 		d = new Display(width, height, gameName);
 		l.setMinimap(new Minimap(l));
 		p = new Player(l.getLevelDimens().getX()/2, l.getLevelDimens().getY()/2, 0);
+	}
+	
+	public Engine(int width, int height, String gameName) {
+		this(width, height, 13, 13, 21, gameName);
 	}
 	
 	@Override

@@ -5,6 +5,7 @@ import greenslimy.start.engine.level.Level;
 import greenslimy.start.engine.level.Minimap;
 import greenslimy.start.misc.Dimension;
 import greenslimy.start.tile.AirTile;
+import greenslimy.start.tile.GrassTile;
 import greenslimy.start.tile.Tile;
 
 import java.awt.AlphaComposite;
@@ -48,7 +49,7 @@ public class Canvas extends JPanel implements KeyListener {
 				for(int x=Engine.l.getLevelDimens().getX();x>0;x--) {
 					Tile t = Engine.l.getTileMap()[z-1][y][x-1];
 					//if(t.isRenderable()) {
-					if(!(pz > 0)) {	//If you are not underground
+					if(!(pz > 0)) {	//If you are not underground, can also be == (remember to remove the !)
 						g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 						int it=0;
 						for(boolean faceDraw:t.getRenderableFaces()) {
@@ -59,6 +60,9 @@ public class Canvas extends JPanel implements KeyListener {
 						}
 						if(t.getTileId() == Engine.p.getSelectedTileId()) {
 							g.drawImage(Engine.p.getPlayerImage(), 100+t.getDimensions().getX(), (Engine.d.getDimensions().height/4)+t.getDimensions().getY(), null);
+						}
+						if(t.hasTallGrass()) {
+							g.drawImage(GrassTile.tallGrass, 100+t.getDimensions().getX(), (Engine.d.getDimensions().height/5)+t.getDimensions().getY(), null);
 						}
 					}else{
 						Tile outsideXTile = map[pz-1][py][0];
@@ -103,11 +107,17 @@ public class Canvas extends JPanel implements KeyListener {
 				}else{
 					tileColor = Level.minimapColors[tile.getTileType()];
 					
-					if(map[tile.getDimensions().getZ()+1][y][x] instanceof AirTile) {
+					if(tile instanceof GrassTile) {
+						if(tile.hasTallGrass()) {
+							tileColor = Color.GREEN.darker();
+						}
+					}
+					
+					if(map[tile.getDimensions().getZ()+1][y][x] instanceof AirTile) {		//Shaft leading down
 						tileColor = Color.DARK_GRAY;
 					}
 					if(pz != 0 && pz != 1) {
-						if(map[tile.getDimensions().getZ()-1][y][x] instanceof AirTile) {
+						if(map[tile.getDimensions().getZ()-1][y][x] instanceof AirTile) {	//Shaft leading up
 							tileColor = Color.LIGHT_GRAY;
 						}
 					}
@@ -120,7 +130,7 @@ public class Canvas extends JPanel implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent k) {
-		System.out.println("Key Pressed: "+KeyEvent.getKeyText(k.getKeyCode()));
+		//System.out.println("Key Pressed: "+KeyEvent.getKeyText(k.getKeyCode())+":"+k.getKeyCode());
 		if(k.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = true;
 		}
@@ -165,7 +175,7 @@ public class Canvas extends JPanel implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent k) {
-		
+		//Dont do anything; code is handled above
 	}
 	
 	
